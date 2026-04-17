@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
 import CapacityGrid from "@/components/capacity/CapacityGrid";
 import CapacitySummary from "@/components/capacity/CapacitySummary";
 import CapacityToolbar from "@/components/capacity/CapacityToolbar";
@@ -22,13 +21,12 @@ import {
   TeamMember,
   WorkloadSnapshot,
 } from "@/lib/capacity/types";
-
 import {
   getPlanForCell,
   getWorkloadForCell,
 } from "@/lib/capacity/calculations";
 
-export default function Home() {
+export default function CapacityPage() {
   const [selectedSprintId, setSelectedSprintId] = useState<number>(1);
   const [selectedTeamId, setSelectedTeamId] = useState<number | "all">("all");
   const [viewMode, setViewMode] = useState<"actual" | "logged">("actual");
@@ -125,46 +123,50 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
       <div className="mx-auto max-w-[1800px] space-y-6 p-6">
-        {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
             Team Capacity Planner
           </h1>
           <p className="mt-2 text-sm text-slate-600">
-            Rows are clients/accounts. Columns are team members.
+            Lightweight MVP view for sprint capacity across Lowveld, Highveld,
+            Bushveld, and any future teams.
           </p>
         </div>
 
-        {/* Top stats */}
-        <div className="rounded-xl border bg-white p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="grid gap-3 md:grid-cols-4">
-            <div>
-              <div className="text-xs text-slate-500">Sprint</div>
-              <div className="font-semibold">{activeSprint.sprint_name}</div>
+            <div className="rounded-xl bg-slate-50 p-4">
+              <div className="text-xs text-slate-500">Current sprint</div>
+              <div className="mt-1 font-semibold text-slate-900">
+                {activeSprint.sprint_name}
+              </div>
             </div>
 
-            <div>
-              <div className="text-xs text-slate-500">Teams</div>
-              <div className="font-semibold">
+            <div className="rounded-xl bg-slate-50 p-4">
+              <div className="text-xs text-slate-500">Visible teams</div>
+              <div className="mt-1 font-semibold text-slate-900">
                 {selectedTeamId === "all"
                   ? `${teams.length} teams`
                   : teams.find((t) => t.id === selectedTeamId)?.team_name}
               </div>
             </div>
 
-            <div>
-              <div className="text-xs text-slate-500">Members</div>
-              <div className="font-semibold">{visibleMembers.length}</div>
+            <div className="rounded-xl bg-slate-50 p-4">
+              <div className="text-xs text-slate-500">Visible members</div>
+              <div className="mt-1 font-semibold text-slate-900">
+                {visibleMembers.length}
+              </div>
             </div>
 
-            <div>
+            <div className="rounded-xl bg-slate-50 p-4">
               <div className="text-xs text-slate-500">Accounts</div>
-              <div className="font-semibold">{accounts.length}</div>
+              <div className="mt-1 font-semibold text-slate-900">
+                {accounts.length}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Toolbar */}
         <CapacityToolbar
           sprints={sprints}
           teams={teams}
@@ -176,7 +178,6 @@ export default function Home() {
           onViewModeChange={setViewMode}
         />
 
-        {/* Grid */}
         <CapacityGrid
           sprintId={selectedSprintId}
           teams={teams}
@@ -185,11 +186,9 @@ export default function Home() {
           capacityPlans={plans}
           workloadSnapshots={workloadSnapshots}
           selectedTeamId={selectedTeamId}
-          viewMode={viewMode}
           onCellClick={handleCellClick}
         />
 
-        {/* Summary */}
         <CapacitySummary
           sprintId={selectedSprintId}
           teams={visibleTeams}
@@ -199,7 +198,6 @@ export default function Home() {
           workloadSnapshots={workloadSnapshots}
         />
 
-        {/* Modal */}
         <EditCapacityModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

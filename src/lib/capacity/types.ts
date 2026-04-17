@@ -22,6 +22,7 @@ export type Account = {
   account_code?: string;
   active: boolean;
   sort_order?: number;
+  color_tag?: string;
 };
 
 export type Sprint = {
